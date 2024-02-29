@@ -1,0 +1,10 @@
+name: Lore
+version: '${project.version}'
+main: com.arcunis.lore.Main
+api-version: '1.20'
+prefix: Lore
+load: STARTUP
+depend: [Core]
+authors: [phant0m2290]
+description: Lore mechanics for Arcünis
+website: arcunis.com
