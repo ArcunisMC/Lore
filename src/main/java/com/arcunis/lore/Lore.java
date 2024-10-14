@@ -1,18 +1,32 @@
 package com.arcunis.lore;
 
+import com.arcunis.lore.custom.Registry;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Logger;
 
 public final class Lore extends JavaPlugin {
 
+    public static Registry registry;
+
+    public Logger logger;
+
     @Override
     public void onLoad() {
-        // Plugin load logic
+        registry = new Registry(this);
+        this.logger = getLogger();
 
     }
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
+        // Register events
+
+        // Register custom items
+
+        // Register commands
+
+        // Register other
 
     }
 
