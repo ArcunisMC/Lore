@@ -1,0 +1,9 @@
+name: Lore
+version: '0.1'
+main: com.arcunis.lore.Lore
+api-version: '1.21'
+prefix: Lore
+load: STARTUP
+authors: [ Phant0m2290 ]
+description: Lore mechanics for Arcunis
+website: https://arcunis.com/plugins/lore
