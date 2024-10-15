@@ -7,3 +7,7 @@ load: STARTUP
 authors: [ Phant0m2290 ]
 description: Lore mechanics for Arcunis
 website: https://arcunis.com/plugins/lore
+permissions:
+  lore.commands.givecustom:
+    default: op
+    description: Give custom items
