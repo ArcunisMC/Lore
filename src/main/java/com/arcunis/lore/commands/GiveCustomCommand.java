@@ -1,6 +1,6 @@
 package com.arcunis.lore.commands;
 
-import com.arcunis.lore.Lore;
+import com.arcunis.lore.Bootstrapper;
 import com.arcunis.lore.custom.Item;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -44,7 +44,7 @@ public class GiveCustomCommand {
     }
 
     private CompletableFuture<Suggestions> itemSuggestor(CommandContext<CommandSourceStack> ctx, SuggestionsBuilder builder) {
-        for (String identifier : Lore.registry.getAllIdentifiers()) builder.suggest(identifier);
+        for (String identifier : Bootstrapper.registry.getAllItemIdentifiers()) builder.suggest(identifier);
         return builder.buildFuture();
     }
 
@@ -53,7 +53,7 @@ public class GiveCustomCommand {
         List<Player> players = ctx.getArgument("targets", PlayerSelectorArgumentResolver.class).resolve(ctx.getSource());
         String identifier = StringArgumentType.getString(ctx, "item");
 
-        Item<?> item = Lore.registry.getItem(identifier);
+        Item<?> item = Bootstrapper.registry.getItem(identifier);
 
         if (item == null) {
             ctx.getSource().getSender().sendMessage(
@@ -76,7 +76,7 @@ public class GiveCustomCommand {
         String identifier = StringArgumentType.getString(ctx, "item");
         int amount = IntegerArgumentType.getInteger(ctx, "amount");
 
-        Item<?> item = Lore.registry.getItem(identifier);
+        Item<?> item = Bootstrapper.registry.getItem(identifier);
 
         if (item == null) {
             ctx.getSource().getSender().sendMessage(

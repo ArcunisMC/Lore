@@ -1,12 +1,15 @@
 name: Lore
 version: '0.1'
-main: com.arcunis.lore.Lore
+main: com.arcunis.lore.Main
+bootstrapper: com.arcunis.lore.Bootstrapper
 api-version: '1.21'
 prefix: Lore
 load: STARTUP
 authors: [ Phant0m2290 ]
+contributors: [ t1g3rrr, enddem0n, mystic__moon, milk2641 ]
 description: Lore mechanics for Arcunis
 website: https://arcunis.com/plugins/lore
+
 permissions:
   lore.commands.givecustom:
     default: op
