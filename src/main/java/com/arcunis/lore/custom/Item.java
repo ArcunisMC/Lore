@@ -1,6 +1,6 @@
 package com.arcunis.lore.custom;
 
-import com.arcunis.lore.Lore;
+import com.arcunis.lore.Bootstrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -8,29 +8,41 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.regex.Pattern;
 
 public abstract class Item<T extends ItemMeta> implements Listener {
 
-    private final Lore plugin;
     public final Material material;
     public final String identifier;
 
     /**
      * Represents a custom item
-     * @param plugin This plugins main class
      * @param material Material this item is made of
      * @param metaType Type of ItemMeta to use
      * @param identifier Unique identifier of the item
      * @throws RuntimeException When either the provided material is empty or the provided metaType does not match the meta of the provided material
      */
-    protected Item(Lore plugin, Material material, Class<T> metaType, String identifier) throws RuntimeException {
-        this.plugin = plugin;
+    public Item(@NotNull Material material, @NotNull Class<T> metaType, @NotNull String identifier) throws RuntimeException {
         this.material = material;
         this.identifier = identifier;
 
+        // If the identifier is invalid, throw error
+        if (!Pattern.compile("^[a-z_]+$").matcher(identifier).matches()) {
+            Bootstrapper.logger.error(
+                    "Failed to register item: '%s'. Invalid identifier"
+                            .formatted(identifier)
+            );
+            throw new RuntimeException(
+                    "Failed to register item: '%s'. Invalid identifier"
+                            .formatted(identifier)
+            );
+        }
+
         // If material cant be obtained, throw error.
         if (material.isEmpty()) {
-            plugin.logger.warning(
+            Bootstrapper.logger.error(
                     "Failed to register item: '%s'. Material cannot be of type %s"
                             .formatted(identifier, material.toString())
             );
@@ -42,7 +54,7 @@ public abstract class Item<T extends ItemMeta> implements Listener {
 
         // If provided metaType is not the metaType of the specified material, throw error.
         if (!metaType.isInstance(ItemStack.of(material).getItemMeta())) {
-            plugin.logger.warning(
+            Bootstrapper.logger.error(
                     "Failed to register item: '%s'. The provided meta type does not match the expected meta type for the material."
                             .formatted(identifier)
             );
@@ -53,7 +65,7 @@ public abstract class Item<T extends ItemMeta> implements Listener {
         }
 
         // Register events
-        Bukkit.getPluginManager().registerEvents(this, plugin);
+        Bukkit.getPluginManager().registerEvents(this, Bootstrapper.plugin);
     }
 
     /**
@@ -64,7 +76,7 @@ public abstract class Item<T extends ItemMeta> implements Listener {
         ItemStack itemStack = ItemStack.of(this.material);
         itemStack.editMeta(meta -> getMeta((T) meta));
         itemStack.editMeta(meta -> {
-            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "identifier"), PersistentDataType.STRING, identifier);
+            meta.getPersistentDataContainer().set(new NamespacedKey(Bootstrapper.plugin, "identifier"), PersistentDataType.STRING, identifier);
         });
         return itemStack;
     }
@@ -73,7 +85,7 @@ public abstract class Item<T extends ItemMeta> implements Listener {
      * Get an instance of {@code T} to apply to the ItemStack
      * @param meta Mutable instance of {@code T}
      */
-    public abstract void getMeta(T meta);
+    protected abstract void getMeta(T meta);
 
     /**
      * Check if the specified ItemStack is this custom item
@@ -81,7 +93,7 @@ public abstract class Item<T extends ItemMeta> implements Listener {
      * @return True if item is this custom item
      */
     protected boolean isThis(ItemStack itemStack) {
-        String identifier = itemStack.getPersistentDataContainer().get(new NamespacedKey(plugin, "identifier"), PersistentDataType.STRING);
+        String identifier = itemStack.getPersistentDataContainer().get(new NamespacedKey(Bootstrapper.plugin, "identifier"), PersistentDataType.STRING);
         return identifier != null && identifier.equals(this.identifier);
     }
 
