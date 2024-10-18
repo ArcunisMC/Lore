@@ -1,7 +1,6 @@
 package com.arcunis.lore.custom;
 
 import com.arcunis.lore.Bootstrapper;
-import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
