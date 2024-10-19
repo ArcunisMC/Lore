@@ -10,12 +10,11 @@ import java.util.List;
 public class ExampleItem extends Item<ItemMeta> {
 
     public ExampleItem() throws RuntimeException {
-        super(Material.STICK, ItemMeta.class, "example_item");
+        super(Material.STICK, ItemMeta.class, "example_item", "Example Item");
     }
 
     @Override
     protected void getMeta(ItemMeta meta) {
-        meta.itemName(Component.text("Example Item"));
         meta.lore(List.of(
                 Component.text("An example item to test the custom item system")
         ));

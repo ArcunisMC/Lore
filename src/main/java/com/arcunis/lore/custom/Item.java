@@ -1,10 +1,12 @@
 package com.arcunis.lore.custom;
 
 import com.arcunis.lore.Bootstrapper;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -15,19 +17,48 @@ import java.util.regex.Pattern;
 public abstract class Item<T extends ItemMeta> implements Listener {
 
     public final Material material;
+    private final Class<T> metaType;
     public final String identifier;
+    public final String itemName;
+    public final ItemRarity itemRarity;
 
     /**
      * Represents a custom item
      * @param material Material this item is made of
      * @param metaType Type of ItemMeta to use
      * @param identifier Unique identifier of the item
+     * @param itemName Name of the item
+     * @param itemRarity Rarity of the item
      * @throws RuntimeException When either the provided material is empty or the provided metaType does not match the meta of the provided material
      */
-    public Item(@NotNull Material material, @NotNull Class<T> metaType, @NotNull String identifier) throws RuntimeException {
+    public Item(@NotNull Material material, @NotNull Class<T> metaType, @NotNull String identifier, String itemName, ItemRarity itemRarity) throws RuntimeException {
         this.material = material;
+        this.metaType = metaType;
         this.identifier = identifier;
+        this.itemName = itemName;
+        this.itemRarity = itemRarity;
+    }
 
+    /**
+     * Represents a custom item
+     * @param material Material this item is made of
+     * @param metaType Type of ItemMeta to use
+     * @param identifier Unique identifier of the item
+     * @param itemName Name of the item
+     * @throws RuntimeException When either the provided material is empty or the provided metaType does not match the meta of the provided material
+     */
+    public Item(@NotNull Material material, @NotNull Class<T> metaType, @NotNull String identifier, String itemName) throws RuntimeException {
+        this.material = material;
+        this.metaType = metaType;
+        this.identifier = identifier;
+        this.itemName = itemName;
+        this.itemRarity = ItemRarity.COMMON;
+    }
+
+    /**
+     * Register the item
+     */
+    public void register() {
         // If the identifier is invalid, throw error
         if (!Pattern.compile("^[a-z_]+$").matcher(identifier).matches()) {
             Bootstrapper.logger.error(
@@ -74,10 +105,12 @@ public abstract class Item<T extends ItemMeta> implements Listener {
      */
     public ItemStack getItemStack() {
         ItemStack itemStack = ItemStack.of(this.material);
-        itemStack.editMeta(meta -> getMeta((T) meta));
         itemStack.editMeta(meta -> {
-            meta.getPersistentDataContainer().set(new NamespacedKey(Bootstrapper.plugin, "identifier"), PersistentDataType.STRING, identifier);
+            meta.itemName(Component.text(itemName));
+            meta.setRarity(itemRarity);
+            meta.getPersistentDataContainer().set(new NamespacedKey(Bootstrapper.plugin, "item"), PersistentDataType.STRING, identifier);
         });
+        itemStack.editMeta(meta -> getMeta((T) meta));
         return itemStack;
     }
 
@@ -93,7 +126,7 @@ public abstract class Item<T extends ItemMeta> implements Listener {
      * @return True if item is this custom item
      */
     protected boolean isThis(ItemStack itemStack) {
-        String identifier = itemStack.getPersistentDataContainer().get(new NamespacedKey(Bootstrapper.plugin, "identifier"), PersistentDataType.STRING);
+        String identifier = itemStack.getPersistentDataContainer().get(new NamespacedKey(Bootstrapper.plugin, "item"), PersistentDataType.STRING);
         return identifier != null && identifier.equals(this.identifier);
     }
 
