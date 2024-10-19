@@ -20,15 +20,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Bootstrapper implements PluginBootstrap {
 
     public static Main plugin;
+    public static String NAMESPACE = "lore";
 
     public static ComponentLogger logger;
     public static Registry registry;
 
     @Override
     public void bootstrap(BootstrapContext context) {
-
-        // Initialize plugin
-        plugin = new Main();
 
         // Get the logger and make it public
         logger = context.getLogger();
@@ -37,7 +35,8 @@ public final class Bootstrapper implements PluginBootstrap {
         registry = new Registry();
 
         // Register custom items
-        new ExampleItem();
+        registry.registerItem(new ExampleItem());
+
 
         // Register custom enchantments
         context.getLifecycleManager().registerEventHandler(RegistryEvents.ENCHANTMENT.freeze().newHandler(event -> {
@@ -60,13 +59,22 @@ public final class Bootstrapper implements PluginBootstrap {
                         RegistryKey.ENCHANTMENT,
                         Key.key(
                                 new NamespacedKey(
-                                        plugin,
+                                        NAMESPACE,
                                         enchantment.identifier
                                 )
-                                        .asString()
-                        )
-                ),
-                enchantment::builder
-        );
+                        ),
+                        builder -> enchantment.builder(builder)
+                );
+            }
+
+        }));
+
     }
+
+    @Override
+    public JavaPlugin createPlugin(PluginProviderContext context) {
+        plugin = new Main();
+        return plugin;
+    }
+
 }
