@@ -39,7 +39,7 @@ public class Registry {
 
     public void registerEnchantment(Enchantment enchantment) {
         enchantments.put(enchantment.identifier, enchantment);
-        Bootstrapper.logger.info("Registered item: %s".formatted(enchantment.identifier));
+        Bootstrapper.logger.info("Registered enchantment: %s".formatted(enchantment.identifier));
     }
 
     public Set<String> getAllEnchantmentIdentifiers() {
