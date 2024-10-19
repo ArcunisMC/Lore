@@ -42,22 +42,15 @@ public final class Bootstrapper implements PluginBootstrap {
         context.getLifecycleManager().registerEventHandler(RegistryEvents.ENCHANTMENT.freeze().newHandler(event -> {
             WritableRegistry<Enchantment, EnchantmentRegistryEntry.Builder> enchantments = event.registry();
 
-            registerEnchantment(enchantments, new ExampleEnchantment());
+            // Put custom enchantments in the registry
+            registry.registerEnchantment(new ExampleEnchantment(event));
 
-        }));
 
-    }
-
-    @Override
-    public JavaPlugin createPlugin(PluginProviderContext context) {
-        return plugin;
-    }
-
-    private void registerEnchantment(WritableRegistry<Enchantment, EnchantmentRegistryEntry.Builder> enchantments, com.arcunis.lore.custom.Enchantment enchantment) {
-        enchantments.register(
-                TypedKey.create(
-                        RegistryKey.ENCHANTMENT,
-                        Key.key(
+            // Register the custom enchantments
+            for (com.arcunis.lore.custom.Enchantment enchantment : registry.getAllEnchantments()) {
+                enchantments.register(
+                        TypedKey.create(
+                                RegistryKey.ENCHANTMENT,
                                 new NamespacedKey(
                                         NAMESPACE,
                                         enchantment.identifier
