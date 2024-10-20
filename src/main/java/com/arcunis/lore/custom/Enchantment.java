@@ -17,12 +17,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-//TODO Add documentation
 public abstract class Enchantment implements Listener {
 
     public final @NotNull String identifier;
@@ -37,6 +37,21 @@ public abstract class Enchantment implements Listener {
     public final @NotNull List<EquipmentSlotGroup> activeSlots;
     public final @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith;
 
+    /**
+     * Represents a custom event
+     * @param event The event that triggers the enchantment registration
+     * @param identifier Unique identifier of the enchantment
+     * @param description Name of the enchantment
+     * @param supportedItems Items the enchantment can be applied to
+     * @param primaryItems Items the enchantment can be naturally applied to
+     * @param weight Chance of the enchantment showing up in an enchantment table. range of 1 to 1024
+     * @param maxLevel Max enchantment level
+     * @param minimumCost Minimum cost to apply this enchantment to an item
+     * @param maximumCost Maximum cost to apply this enchantment to an item
+     * @param anvilCost Cost to put this enchantment on an item using an anvil
+     * @param activeSlots Slots in which the enchantment is active
+     * @param exclusiveWith Enchantments that prevent this enchantment from being applied
+     */
     public Enchantment(
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
@@ -64,6 +79,20 @@ public abstract class Enchantment implements Listener {
         this.exclusiveWith = exclusiveWith;
     }
 
+    /**
+     * Represents a custom event
+     * @param event The event that triggers the enchantment registration
+     * @param identifier Unique identifier of the enchantment
+     * @param description Name of the enchantment
+     * @param supportedItems Items the enchantment can be applied to
+     * @param weight Chance of the enchantment showing up in an enchantment table. range of 1 to 1024
+     * @param maxLevel Max enchantment level
+     * @param minimumCost Minimum cost to apply this enchantment to an item
+     * @param maximumCost Maximum cost to apply this enchantment to an item
+     * @param anvilCost Cost to put this enchantment on an item using an anvil
+     * @param activeSlots Slots in which the enchantment is active
+     * @param exclusiveWith Enchantments that prevent this enchantment from being applied
+     */
     public Enchantment(
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
@@ -80,6 +109,20 @@ public abstract class Enchantment implements Listener {
         this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, exclusiveWith);
     }
 
+    /**
+     * Represents a custom event
+     * @param event The event that triggers the enchantment registration
+     * @param identifier Unique identifier of the enchantment
+     * @param description Name of the enchantment
+     * @param supportedItems Items the enchantment can be applied to
+     * @param primaryItems Items the enchantment can be naturally applied to
+     * @param weight Chance of the enchantment showing up in an enchantment table. range of 1 to 1024
+     * @param maxLevel Max enchantment level
+     * @param minimumCost Minimum cost to apply this enchantment to an item
+     * @param maximumCost Maximum cost to apply this enchantment to an item
+     * @param anvilCost Cost to put this enchantment on an item using an anvil
+     * @param activeSlots Slots in which the enchantment is active
+     */
     public Enchantment(
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
@@ -96,6 +139,19 @@ public abstract class Enchantment implements Listener {
         this(event, identifier, description, supportedItems, primaryItems, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null);
     }
 
+    /**
+     * Represents a custom event
+     * @param event The event that triggers the enchantment registration
+     * @param identifier Unique identifier of the enchantment
+     * @param description Name of the enchantment
+     * @param supportedItems Items the enchantment can be applied to
+     * @param weight Chance of the enchantment showing up in an enchantment table. range of 1 to 1024
+     * @param maxLevel Max enchantment level
+     * @param minimumCost Minimum cost to apply this enchantment to an item
+     * @param maximumCost Maximum cost to apply this enchantment to an item
+     * @param anvilCost Cost to put this enchantment on an item using an anvil
+     * @param activeSlots Slots in which the enchantment is active
+     */
     public Enchantment(
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
@@ -111,6 +167,21 @@ public abstract class Enchantment implements Listener {
         this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null);
     }
 
+    /**
+     * Represents a custom event
+     * @param event The event that triggers the enchantment registration
+     * @param identifier Unique identifier of the enchantment
+     * @param description Name of the enchantment
+     * @param supportedItems Items the enchantment can be applied to
+     * @param primaryItems Items the enchantment can be naturally applied to
+     * @param weight Chance of the enchantment showing up in an enchantment table. range of 1 to 1024
+     * @param maxLevel Max enchantment level
+     * @param minimumCost Minimum cost to apply this enchantment to an item
+     * @param maximumCost Maximum cost to apply this enchantment to an item
+     * @param anvilCost Cost to put this enchantment on an item using an anvil
+     * @param activeSlots Slots in which the enchantment is active
+     * @param exclusiveWith Enchantments that prevent this enchantment from being applied
+     */
     public Enchantment(
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
@@ -152,6 +223,20 @@ public abstract class Enchantment implements Listener {
         this.exclusiveWith = exclusiveWith;
     }
 
+    /**
+     * Represents a custom event
+     * @param event The event that triggers the enchantment registration
+     * @param identifier Unique identifier of the enchantment
+     * @param description Name of the enchantment
+     * @param supportedItems Items the enchantment can be applied to
+     * @param weight Chance of the enchantment showing up in an enchantment table. range of 1 to 1024
+     * @param maxLevel Max enchantment level
+     * @param minimumCost Minimum cost to apply this enchantment to an item
+     * @param maximumCost Maximum cost to apply this enchantment to an item
+     * @param anvilCost Cost to put this enchantment on an item using an anvil
+     * @param activeSlots Slots in which the enchantment is active
+     * @param exclusiveWith Enchantments that prevent this enchantment from being applied
+     */
     public Enchantment(
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
@@ -168,6 +253,20 @@ public abstract class Enchantment implements Listener {
         this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, exclusiveWith);
     }
 
+    /**
+     * Represents a custom event
+     * @param event The event that triggers the enchantment registration
+     * @param identifier Unique identifier of the enchantment
+     * @param description Name of the enchantment
+     * @param supportedItems Items the enchantment can be applied to
+     * @param primaryItems Items the enchantment can be naturally applied to
+     * @param weight Chance of the enchantment showing up in an enchantment table. range of 1 to 1024
+     * @param maxLevel Max enchantment level
+     * @param minimumCost Minimum cost to apply this enchantment to an item
+     * @param maximumCost Maximum cost to apply this enchantment to an item
+     * @param anvilCost Cost to put this enchantment on an item using an anvil
+     * @param activeSlots Slots in which the enchantment is active
+     */
     public Enchantment(
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
@@ -184,6 +283,19 @@ public abstract class Enchantment implements Listener {
         this(event, identifier, description, supportedItems, primaryItems, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null);
     }
 
+    /**
+     * Represents a custom event
+     * @param event The event that triggers the enchantment registration
+     * @param identifier Unique identifier of the enchantment
+     * @param description Name of the enchantment
+     * @param supportedItems Items the enchantment can be applied to
+     * @param weight Chance of the enchantment showing up in an enchantment table. range of 1 to 1024
+     * @param maxLevel Max enchantment level
+     * @param minimumCost Minimum cost to apply this enchantment to an item
+     * @param maximumCost Maximum cost to apply this enchantment to an item
+     * @param anvilCost Cost to put this enchantment on an item using an anvil
+     * @param activeSlots Slots in which the enchantment is active
+     */
     public Enchantment(
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
@@ -212,8 +324,14 @@ public abstract class Enchantment implements Listener {
         if (exclusiveWith != null) builder.exclusiveWith(exclusiveWith);
     }
 
-    public static boolean hasEnchant(String identifier, ItemStack itemStack) {
-        return itemStack.getItemMeta().hasEnchant(RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).getOrThrow(new NamespacedKey(Bootstrapper.NAMESPACE, identifier)));
+    /**
+     * Check if the specified item has the specified enchantment
+     * @param namespacedKey The enchantment
+     * @param itemStack The item stack to check on
+     * @return True if the item has the enchantment
+     */
+    public static boolean hasEnchant(NamespacedKey namespacedKey, ItemStack itemStack) {
+        return itemStack.getItemMeta().hasEnchant(RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).getOrThrow(namespacedKey));
     }
 
 }
