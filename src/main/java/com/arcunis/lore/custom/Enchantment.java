@@ -11,6 +11,7 @@ import io.papermc.paper.registry.set.RegistryKeySet;
 import io.papermc.paper.registry.set.RegistrySet;
 import io.papermc.paper.registry.tag.TagKey;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.event.Listener;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Enchantment implements Listener {
 
@@ -51,25 +53,41 @@ public abstract class Enchantment implements Listener {
      * @param anvilCost Cost to put this enchantment on an item using an anvil
      * @param activeSlots Slots in which the enchantment is active
      * @param exclusiveWith Enchantments that prevent this enchantment from being applied
+     * @param isTag Workaround for a wierd error related to using {@code List<TagKey<ItemType>>} Lists. Value is ignored
      */
     public Enchantment(
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
             @NotNull Component description,
-            @NotNull TagKey<ItemType> supportedItems,
-            @Nullable TagKey<ItemType> primaryItems,
+            @NotNull List<TagKey<ItemType>> supportedItems,
+            @Nullable List<TagKey<ItemType>> primaryItems,
             @NotNull int weight,
             @NotNull int maxLevel,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost,
             @NotNull int anvilCost,
             @NotNull List<EquipmentSlotGroup> activeSlots,
-            @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith
+            @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith,
+            boolean isTag
     ) {
         this.identifier = identifier;
         this.description = description;
-        this.supportedItems = event.getOrCreateTag(supportedItems);
-        this.primaryItems = event.getOrCreateTag(primaryItems);
+
+        this.supportedItems = RegistrySet.keySet(
+                RegistryKey.ITEM,
+                supportedItems.stream().map(
+                        itemType -> TypedKey.create(RegistryKey.ITEM, itemType.key())
+                ).toList()
+        );
+
+        this.primaryItems = primaryItems != null ?
+                RegistrySet.keySet(
+                        RegistryKey.ITEM,
+                        primaryItems.stream()
+                                .map(itemType -> TypedKey.create(RegistryKey.ITEM, itemType.key()))
+                                .toList()
+                ) : null;
+
         this.weight = weight;
         this.maxLevel = maxLevel;
         this.minimumCost = minimumCost;
@@ -92,21 +110,23 @@ public abstract class Enchantment implements Listener {
      * @param anvilCost Cost to put this enchantment on an item using an anvil
      * @param activeSlots Slots in which the enchantment is active
      * @param exclusiveWith Enchantments that prevent this enchantment from being applied
+     * @param isTag Workaround for a wierd error related to using {@code List<TagKey<ItemType>>} Lists. Value is ignored
      */
     public Enchantment(
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
             @NotNull Component description,
-            @NotNull TagKey<ItemType> supportedItems,
+            @NotNull List<TagKey<ItemType>> supportedItems,
             @NotNull int weight,
             @NotNull int maxLevel,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost,
             @NotNull int anvilCost,
             @NotNull List<EquipmentSlotGroup> activeSlots,
-            @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith
+            @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith,
+            boolean isTag
     ) {
-        this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, exclusiveWith);
+        this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, exclusiveWith, isTag);
     }
 
     /**
@@ -122,21 +142,23 @@ public abstract class Enchantment implements Listener {
      * @param maximumCost Maximum cost to apply this enchantment to an item
      * @param anvilCost Cost to put this enchantment on an item using an anvil
      * @param activeSlots Slots in which the enchantment is active
+     * @param isTag Workaround for a wierd error related to using {@code List<TagKey<ItemType>>} Lists. Value is ignored
      */
     public Enchantment(
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
             @NotNull Component description,
-            @NotNull TagKey<ItemType> supportedItems,
-            @Nullable TagKey<ItemType> primaryItems,
+            @NotNull List<TagKey<ItemType>> supportedItems,
+            @Nullable List<TagKey<ItemType>> primaryItems,
             @NotNull int weight,
             @NotNull int maxLevel,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost,
             @NotNull int anvilCost,
-            @NotNull List<EquipmentSlotGroup> activeSlots
+            @NotNull List<EquipmentSlotGroup> activeSlots,
+            boolean isTag
     ) {
-        this(event, identifier, description, supportedItems, primaryItems, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null);
+        this(event, identifier, description, supportedItems, primaryItems, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null, isTag);
     }
 
     /**
@@ -151,20 +173,22 @@ public abstract class Enchantment implements Listener {
      * @param maximumCost Maximum cost to apply this enchantment to an item
      * @param anvilCost Cost to put this enchantment on an item using an anvil
      * @param activeSlots Slots in which the enchantment is active
+     * @param isTag Workaround for a wierd error related to using {@code List<TagKey<ItemType>>} Lists. Value is ignored
      */
     public Enchantment(
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
             @NotNull Component description,
-            @NotNull TagKey<ItemType> supportedItems,
+            @NotNull List<TagKey<ItemType>> supportedItems,
             @NotNull int weight,
             @NotNull int maxLevel,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost,
             @NotNull int anvilCost,
-            @NotNull List<EquipmentSlotGroup> activeSlots
+            @NotNull List<EquipmentSlotGroup> activeSlots,
+            boolean isTag
     ) {
-        this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null);
+        this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null, isTag);
     }
 
     /**

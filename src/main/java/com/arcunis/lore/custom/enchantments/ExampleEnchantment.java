@@ -28,7 +28,7 @@ public class ExampleEnchantment extends Enchantment {
         super(
                 event,
                 "example_enchantment",
-                Component.translatable("enchantment.minecraft.example_enchantment", "Example Enchantment"),
+                Component.translatable("enchantment.arcunis.example_enchantment", "Example Enchantment"),
                 List.of(
                         ItemType.STICK
                 ),
