@@ -1,7 +1,7 @@
 package com.arcunis.lore;
 
 import com.arcunis.lore.custom.Registry;
-import com.arcunis.lore.custom.enchantments.ExampleEnchantment;
+import com.arcunis.lore.custom.enchantments.SoulboundEnchantment;
 import com.arcunis.lore.custom.items.ExampleItem;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
@@ -11,7 +11,6 @@ import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.event.RegistryEvents;
 import io.papermc.paper.registry.event.WritableRegistry;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -43,7 +42,8 @@ public final class Bootstrapper implements PluginBootstrap {
             WritableRegistry<Enchantment, EnchantmentRegistryEntry.Builder> enchantments = event.registry();
 
             // Put custom enchantments in the registry
-            registry.registerEnchantment(new ExampleEnchantment(event));
+            //registry.registerEnchantment(new ExampleEnchantment(event));
+            registry.registerEnchantment(new SoulboundEnchantment(event));
 
 
             // Register the custom enchantments
