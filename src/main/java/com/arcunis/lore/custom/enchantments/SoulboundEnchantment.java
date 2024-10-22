@@ -6,6 +6,7 @@ import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.event.RegistryFreezeEvent;
+import io.papermc.paper.registry.keys.tags.EnchantmentTagKeys;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Item;
@@ -28,13 +29,19 @@ public class SoulboundEnchantment extends Enchantment {
                 event,
                 "soulbound",
                 Component.translatable("enchantment.arcunis.soulbound", "Soulbound"),
-                RegistryAccess.registryAccess().getRegistry(RegistryKey.ITEM).stream().toList(),
+                Set.copyOf(RegistryAccess.registryAccess().getRegistry(RegistryKey.ITEM).stream().toList()),
                 2,
                 1,
                 EnchantmentRegistryEntry.EnchantmentCost.of(10, 0),
                 EnchantmentRegistryEntry.EnchantmentCost.of(10, 0),
                 10,
-                List.of(EquipmentSlotGroup.ANY)
+                Set.of(
+                        EquipmentSlotGroup.ANY
+                ),
+                Set.of(
+                        EnchantmentTagKeys.TRADEABLE,
+                        EnchantmentTagKeys.IN_ENCHANTING_TABLE
+                )
         );
     }
 

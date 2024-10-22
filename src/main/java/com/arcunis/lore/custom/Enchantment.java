@@ -9,6 +9,8 @@ import io.papermc.paper.registry.set.RegistryKeySet;
 import io.papermc.paper.registry.set.RegistrySet;
 import io.papermc.paper.registry.tag.TagKey;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
+import net.minecraft.tags.EnchantmentTags;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.EquipmentSlotGroup;
@@ -17,7 +19,8 @@ import org.bukkit.inventory.ItemType;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Enchantment implements Listener {
 
@@ -30,8 +33,9 @@ public abstract class Enchantment implements Listener {
     public final @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost;
     public final @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost;
     public final int anvilCost;
-    public final @NotNull List<EquipmentSlotGroup> activeSlots;
+    public final @NotNull Set<EquipmentSlotGroup> activeSlots;
     public final @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith;
+    public final @NotNull Set<TagKey<org.bukkit.enchantments.Enchantment>> tags;
 
     /**
      * Represents a custom event
@@ -59,8 +63,9 @@ public abstract class Enchantment implements Listener {
             @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost,
             @NotNull int anvilCost,
-            @NotNull List<EquipmentSlotGroup> activeSlots,
-            @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith
+            @NotNull Set<EquipmentSlotGroup> activeSlots,
+            @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith,
+            @NotNull Set<TagKey<org.bukkit.enchantments.Enchantment>> tags
     ) {
         this.identifier = identifier;
         this.description = description;
@@ -73,6 +78,7 @@ public abstract class Enchantment implements Listener {
         this.anvilCost = anvilCost;
         this.activeSlots = activeSlots;
         this.exclusiveWith = exclusiveWith;
+        this.tags = tags;
     }
 
     /**
@@ -99,10 +105,11 @@ public abstract class Enchantment implements Listener {
             @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost,
             @NotNull int anvilCost,
-            @NotNull List<EquipmentSlotGroup> activeSlots,
-            @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith
+            @NotNull Set<EquipmentSlotGroup> activeSlots,
+            @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith,
+            @NotNull Set<TagKey<org.bukkit.enchantments.Enchantment>> tags
     ) {
-        this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, exclusiveWith);
+        this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, exclusiveWith, tags);
     }
 
     /**
@@ -130,9 +137,10 @@ public abstract class Enchantment implements Listener {
             @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost,
             @NotNull int anvilCost,
-            @NotNull List<EquipmentSlotGroup> activeSlots
+            @NotNull Set<EquipmentSlotGroup> activeSlots,
+            @NotNull Set<TagKey<org.bukkit.enchantments.Enchantment>> tags
     ) {
-        this(event, identifier, description, supportedItems, primaryItems, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null);
+        this(event, identifier, description, supportedItems, primaryItems, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null, tags);
     }
 
     /**
@@ -158,9 +166,10 @@ public abstract class Enchantment implements Listener {
             @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost,
             @NotNull int anvilCost,
-            @NotNull List<EquipmentSlotGroup> activeSlots
+            @NotNull Set<EquipmentSlotGroup> activeSlots,
+            @NotNull Set<TagKey<org.bukkit.enchantments.Enchantment>> tags
     ) {
-        this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null);
+        this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null, tags);
     }
 
     /**
@@ -182,15 +191,16 @@ public abstract class Enchantment implements Listener {
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
             @NotNull Component description,
-            @NotNull List<ItemType> supportedItems,
-            @Nullable List<ItemType> primaryItems,
+            @NotNull Set<ItemType> supportedItems,
+            @Nullable Set<ItemType> primaryItems,
             @NotNull int weight,
             @NotNull int maxLevel,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost,
             @NotNull int anvilCost,
-            @NotNull List<EquipmentSlotGroup> activeSlots,
-            @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith
+            @NotNull Set<EquipmentSlotGroup> activeSlots,
+            @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith,
+            @NotNull Set<TagKey<org.bukkit.enchantments.Enchantment>> tags
     ) {
         this.identifier = identifier;
         this.description = description;
@@ -217,6 +227,7 @@ public abstract class Enchantment implements Listener {
         this.anvilCost = anvilCost;
         this.activeSlots = activeSlots;
         this.exclusiveWith = exclusiveWith;
+        this.tags = tags;
     }
 
     /**
@@ -237,16 +248,17 @@ public abstract class Enchantment implements Listener {
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
             @NotNull Component description,
-            @NotNull List<ItemType> supportedItems,
+            @NotNull Set<ItemType> supportedItems,
             @NotNull int weight,
             @NotNull int maxLevel,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost,
             @NotNull int anvilCost,
-            @NotNull List<EquipmentSlotGroup> activeSlots,
-            @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith
+            @NotNull Set<EquipmentSlotGroup> activeSlots,
+            @Nullable RegistryKeySet<org.bukkit.enchantments.Enchantment> exclusiveWith,
+            @NotNull Set<TagKey<org.bukkit.enchantments.Enchantment>> tags
     ) {
-        this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, exclusiveWith);
+        this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, exclusiveWith, tags);
     }
 
     /**
@@ -267,16 +279,17 @@ public abstract class Enchantment implements Listener {
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
             @NotNull Component description,
-            @NotNull List<ItemType> supportedItems,
-            @Nullable List<ItemType> primaryItems,
+            @NotNull Set<ItemType> supportedItems,
+            @Nullable Set<ItemType> primaryItems,
             @NotNull int weight,
             @NotNull int maxLevel,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost,
             @NotNull int anvilCost,
-            @NotNull List<EquipmentSlotGroup> activeSlots
+            @NotNull Set<EquipmentSlotGroup> activeSlots,
+            @NotNull Set<TagKey<org.bukkit.enchantments.Enchantment>> tags
     ) {
-        this(event, identifier, description, supportedItems, primaryItems, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null);
+        this(event, identifier, description, supportedItems, primaryItems, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null, tags);
     }
 
     /**
@@ -296,15 +309,16 @@ public abstract class Enchantment implements Listener {
             @NotNull RegistryFreezeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
             @NotNull String identifier,
             @NotNull Component description,
-            @NotNull List<ItemType> supportedItems,
+            @NotNull Set<ItemType> supportedItems,
             @NotNull int weight,
             @NotNull int maxLevel,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost minimumCost,
             @NotNull EnchantmentRegistryEntry.EnchantmentCost maximumCost,
             @NotNull int anvilCost,
-            @NotNull List<EquipmentSlotGroup> activeSlots
+            @NotNull Set<EquipmentSlotGroup> activeSlots,
+            @NotNull Set<TagKey<org.bukkit.enchantments.Enchantment>> tags
     ) {
-        this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null);
+        this(event, identifier, description, supportedItems, null, weight, maxLevel, minimumCost, maximumCost, anvilCost, activeSlots, null, tags);
     }
 
     public void builder(EnchantmentRegistryEntry.Builder builder) {
