@@ -9,8 +9,6 @@ import io.papermc.paper.registry.set.RegistryKeySet;
 import io.papermc.paper.registry.set.RegistrySet;
 import io.papermc.paper.registry.tag.TagKey;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TranslatableComponent;
-import net.minecraft.tags.EnchantmentTags;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.EquipmentSlotGroup;
